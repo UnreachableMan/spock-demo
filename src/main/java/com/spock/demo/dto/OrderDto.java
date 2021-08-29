@@ -1,13 +1,11 @@
-package com.spock.demo.param;
+package com.spock.demo.dto;
 
 import com.spock.demo.enums.OrderTypeEnum;
-import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-
-public class OrderCreateParam {
+public class OrderDto {
 
     private OrderTypeEnum type;
     private BigDecimal price;
@@ -21,14 +19,6 @@ public class OrderCreateParam {
 
     public void setType(OrderTypeEnum type) {
         this.type = type;
-    }
-
-
-    public void checkParam() {
-
-        if (userId == null || type == null || price == null || CollectionUtils.isEmpty(items)) {
-            throw new RuntimeException("参数不合法");
-        }
     }
 
     public BigDecimal getPrice() {

@@ -1,3 +1,4 @@
+import com.spock.demo.dto.OrderDto
 import com.spock.demo.enums.OrderTypeEnum
 import com.spock.demo.exception.OrderException
 import com.spock.demo.handler.Handler
@@ -15,18 +16,23 @@ class OrderServiceSpec extends Specification {
     @Unroll
     def "创建订单成功"() {
 
-        given:
+        given: "初始化变量"
         orderService.handler = handlerMock
-        when:
+        when: "创建订单"
         def orderId = orderService.createOrder(createParam)
 
-        then:
+        then: "对方法调用情况进行判断"
 
         orderId > 0
-
         //方法的调用次数只能统计orderService内层变量对应的方法调用，而不能是orderService自己的方法被调用了多少次，因为它不是Mock的，没有走spock托管的
-        count1 * handlerMock.handler1()
-        count2 * handlerMock.handler2()
+        count1 * handlerMock.handler1({ Long userId -> userId == createParam.userId })
+        count2 * handlerMock.handler2({
+            verifyAll(it, OrderDto) {
+                type == createParam.type
+                price == createParam.price
+                items == createParam.items
+            }
+        } as OrderDto)
         count3 * handlerMock.handler3()
         count4 * handlerMock.handler4()
 
@@ -62,4 +68,6 @@ class OrderServiceSpec extends Specification {
         OrderException   | "订单类型异常" || new OrderCreateParam(type: OrderTypeEnum.TYPE5, userId: 000002L, items: ["aaa"], price: new BigDecimal(1))
 
     }
+
+
 }

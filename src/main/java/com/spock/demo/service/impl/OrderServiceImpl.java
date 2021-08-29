@@ -1,10 +1,12 @@
 package com.spock.demo.service.impl;
 
+import com.spock.demo.dto.OrderDto;
 import com.spock.demo.exception.OrderException;
 import com.spock.demo.handler.Handler;
 import com.spock.demo.param.OrderCreateParam;
 import com.spock.demo.param.PayOrderParam;
 import com.spock.demo.service.OrderService;
+import com.spock.demo.util.DataMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +29,11 @@ public class OrderServiceImpl implements OrderService {
         switch (param.getType()) {
 
             case TYPE1:
-                handler.handler1();
+                handler.handler1(param.getUserId());
                 break;
             case TYPE2:
-                handler.handler2();
+                OrderDto orderDto = DataMapperUtil.INSTANCE.toOrderDto(param);
+                handler.handler2(orderDto);
                 break;
             case TYPE3:
                 handler.handler3();
