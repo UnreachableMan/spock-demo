@@ -5,6 +5,7 @@ import com.spock.demo.exception.OrderException;
 import com.spock.demo.handler.Handler;
 import com.spock.demo.param.OrderCreateParam;
 import com.spock.demo.param.PayOrderParam;
+import com.spock.demo.rpc.PayRpcClass;
 import com.spock.demo.service.OrderService;
 import com.spock.demo.util.DataMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private Handler handler;
+
+    @Autowired
+    private PayRpcClass payRpcClass;
 
 
     @Override
@@ -53,6 +57,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void payOrder(PayOrderParam param) {
+        String s = payRpcClass.invoke1(param.getOrderNo());
+
+        String s1 = handler.handler5(s);
 
     }
 
