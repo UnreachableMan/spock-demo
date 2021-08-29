@@ -26,6 +26,7 @@ public class OrderServiceImpl implements OrderService {
         if (param.getUserId() == 000001L) {
             throw new RuntimeException("已经下单，请稍等");
         }
+        String handler2Result = null;
         switch (param.getType()) {
 
             case TYPE1:
@@ -33,7 +34,8 @@ public class OrderServiceImpl implements OrderService {
                 break;
             case TYPE2:
                 OrderDto orderDto = DataMapperUtil.INSTANCE.toOrderDto(param);
-                handler.handler2(orderDto);
+                handler2Result = handler.handler2(orderDto);
+                System.out.println(handler2Result);
                 break;
             case TYPE3:
                 handler.handler3();
@@ -44,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
             default:
                 throw new OrderException("订单类型异常");
         }
-
+        handler.handler5(handler2Result);
         return 1L;
 
     }

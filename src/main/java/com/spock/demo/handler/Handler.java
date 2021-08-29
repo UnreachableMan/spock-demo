@@ -26,4 +26,9 @@ public class Handler {
         System.out.println("handler4");
         return null;
     }
+
+    public String handler5(String param){
+        System.out.println("handler5");
+        return null;
+    }
 }

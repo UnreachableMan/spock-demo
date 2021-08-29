@@ -18,6 +18,7 @@ class OrderServiceSpec extends Specification {
 
         given: "初始化变量"
         orderService.handler = handlerMock
+        handlerMock.handler2(_) >> handler2Result
         when: "创建订单"
         def orderId = orderService.createOrder(createParam)
 
@@ -35,15 +36,16 @@ class OrderServiceSpec extends Specification {
         } as OrderDto)
         count3 * handlerMock.handler3()
         count4 * handlerMock.handler4()
+        count5 * handlerMock.handler5({ String param -> param == handler2Result})
 
         where:
-        count1 | count2 | count3 | count4 || createParam
+        count1 | count2 | count3 | count4 | count5 | handler2Result || createParam
 
         //主要校验调用次数是否一致
-        1      | 0      | 0      | 0      || new OrderCreateParam(type: OrderTypeEnum.TYPE1, userId: 000002L, items: ["aaa"], price: new BigDecimal(1))
-        0      | 1      | 0      | 0      || new OrderCreateParam(type: OrderTypeEnum.TYPE2, userId: 000002L, items: ["aaa"], price: new BigDecimal(1))
-        0      | 0      | 1      | 0      || new OrderCreateParam(type: OrderTypeEnum.TYPE3, userId: 000002L, items: ["aaa"], price: new BigDecimal(1))
-        0      | 0      | 0      | 1      || new OrderCreateParam(type: OrderTypeEnum.TYPE4, userId: 000002L, items: ["aaa"], price: new BigDecimal(1))
+        1      | 0      | 0      | 0      | 1      | null           || new OrderCreateParam(type: OrderTypeEnum.TYPE1, userId: 000002L, items: ["aaa"], price: new BigDecimal(1))
+        0      | 1      | 0      | 0      | 1      | "result"       || new OrderCreateParam(type: OrderTypeEnum.TYPE2, userId: 000002L, items: ["aaa"], price: new BigDecimal(1))
+        0      | 0      | 1      | 0      | 1      | null           || new OrderCreateParam(type: OrderTypeEnum.TYPE3, userId: 000002L, items: ["aaa"], price: new BigDecimal(1))
+        0      | 0      | 0      | 1      | 1      | null           || new OrderCreateParam(type: OrderTypeEnum.TYPE4, userId: 000002L, items: ["aaa"], price: new BigDecimal(1))
     }
 
     @Unroll
